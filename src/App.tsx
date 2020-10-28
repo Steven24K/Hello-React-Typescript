@@ -1,88 +1,48 @@
-import React from 'react'
 import '../static/css/site.css'
-
-import {
-    MemoryRouter as Router,
-    Switch,
-    Route,
-    Link
-} from "react-router-dom";
+import { Action, any, async, browserRouter, doRouting, notFoundRouteCase, onlyIf, route, routerSwitch, Routes, stateful } from 'widgets-for-react';
+import { AppState, initialAppState, isRouteChanged, RouteParams, setAppStateRoute, set_Products } from './state';
+import { about, contact, home, product_detail, product_overview, notFound, navbar } from './views';
+import { memoryRouter } from './components/MemoryRouter';
+import { Product } from './models/Product';
 
 
-import { Entity } from 'ts-lenses';
-import { hello_world_app } from './components/HelloWorld';
-import { simpleForm } from './components/SimpleForm';
-import { simple_api } from './components/SimpleAPI';
-import { asyncStateExample } from './components/AsyncState';
+export const App = stateful<AppState>()(s0 => memoryRouter<Action<AppState>>()(
+    any<Action<AppState>>()([
 
-const native_react_component = (color: string, onChange: (value: string) => void) => <div className='App' style={{ backgroundColor: color }}>
-    <div>
-        <div className="credits">
-            Made by <a target="_blank" href="https://stevenkoerts.nl/">Steven Koerts</a> <a target="_blank" href="https://github.com/Steven24K">GitHub</a>
-        </div>
+        routerSwitch<RouteParams>({ key: 'my-router' })([
+            route<{}, RouteParams>('/', () => ({ kind: 'home' })),
 
-        <div className='container'>
-            <div className='picker-container'>
-                <h1>Pick your favorit color!</h1>
-                <input className='picker' onChange={event => onChange(event.target.value)} type='color' value={color} />
-            </div>
-        </div>
+            route<{}, RouteParams>('/about', () => ({ kind: 'about' })),
 
-    </div>
-</div>
+            route<{}, RouteParams>('/contact', () => ({ kind: 'contact' })),
 
-type AppState = {
-    color: string
-}
+            route<{ order?: 'asc' | 'desc' }, RouteParams>('/products/:order?', a => ({ kind: 'products', order: a.order })),
 
-type AppProps = {}
-export default class App extends React.Component<AppProps, AppState> {
-    constructor(props: AppProps) {
-        super(props)
-        this.state = { color: 'white' }
-    }
+            route<{ id: number }, RouteParams>('/product/:id', a => ({ kind: 'product', id: a.id })),
 
-    render() {
-        return <Router>
-            <div>
-                <nav>
-                    <li>
-                        <Link to='/'>Home</Link>
-                    </li>
-                    <li>
-                        <Link to='/hello'>Hello React Widgets</Link>
-                    </li>
-                    <li>
-                        <Link to='/form'>Simple Form</Link>
-                    </li>
-                    <li>
-                        <Link to='/api'>Simple API</Link>
-                    </li>
-                    <li>
-                        <Link to='/async'>Async State</Link>
-                    </li>
-                </nav>
-            </div>
 
-            <Switch>
-                <Route exact path='/'>
-                    {native_react_component(this.state.color, (value) => this.setState(s => Entity(s).set('color', _ => value).commit()))}
-                </Route>
-                <Route path='/hello' >
-                    {hello_world_app.run(res => console.log("The widget has produced some output data ", res))}
-                </Route>
-                <Route path='/form'>
-                    {simpleForm.run(res => console.log('Simpleform ',res))}
-                </Route>
-                <Route path='/api'>
-                    {simple_api.run(res => console.log('Simple API ',res))}
-                </Route>
-                <Route path='/async'>
-                    {asyncStateExample.widget().run(res => console.log('Async state ',res))}
-                </Route>
-            </Switch>
 
-        </Router>
-    }
-    
-}
+            notFoundRouteCase<RouteParams>(() => ({ kind: '404' }))
+        ]).filter(newRoute => isRouteChanged(s0.route, newRoute))
+            .map(route => s => setAppStateRoute(route, s)),
+
+        async<Product[]>()(s0.products).map(a => s => set_Products(a(s.products))(s)),
+
+        navbar(s0),
+
+        onlyIf(s0.currentPage.kind == 'home-page', home(s0)),
+
+        onlyIf(s0.currentPage.kind == 'about-page', about(s0)),
+
+        onlyIf(s0.currentPage.kind == 'contact-page', contact(s0)),
+
+        onlyIf(s0.currentPage.kind == 'products-overview', product_overview(s0)),
+
+        onlyIf(s0.currentPage.kind == 'product-detail', product_detail(s0)),
+
+        onlyIf(s0.currentPage.kind == 'notfound', notFound(s0))
+
+
+
+    ])
+).map(a => a(s0)))(initialAppState())
