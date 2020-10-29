@@ -4,6 +4,7 @@ import { AppState, initialAppState, isRouteChanged, RouteParams, setAppStateRout
 import { about, contact, home, product_detail, product_overview, notFound, navbar } from './views';
 import { memoryRouter } from './components/MemoryRouter';
 import { Product } from './models/Product';
+import { Map } from 'immutable';
 
 
 export const App = stateful<AppState>()(s0 => memoryRouter<Action<AppState>>()(
@@ -18,7 +19,7 @@ export const App = stateful<AppState>()(s0 => memoryRouter<Action<AppState>>()(
 
             route<{ order?: 'asc' | 'desc' }, RouteParams>('/products/:order?', a => ({ kind: 'products', order: a.order })),
 
-            route<{ id: number }, RouteParams>('/product/:id', a => ({ kind: 'product', id: a.id })),
+            route<{ id: number }, RouteParams>('/product/:id', a => ({ kind: 'product', id: isNaN(a.id) ? 0 : +a.id })),
 
 
 
@@ -26,7 +27,7 @@ export const App = stateful<AppState>()(s0 => memoryRouter<Action<AppState>>()(
         ]).filter(newRoute => isRouteChanged(s0.route, newRoute))
             .map(route => s => setAppStateRoute(route, s)),
 
-        async<Product[]>()(s0.products).map(a => s => set_Products(a(s.products))(s)),
+        async<Map<number, Product>>()(s0.products).map(a => s => set_Products(a(s.products))(s)),
 
         navbar(s0),
 

@@ -7,15 +7,13 @@ import { Product } from "./models/Product"
 export type AppState = {
     route: RouteParams
     currentPage: HomePageState | AboutPageState | ContactPageState | ProductOverViewPageState | ProductDetailPageState | NotFoundPageState
-    products: AsyncState<Product[]>
-    productCache: Map<number, Product>
+    products: AsyncState<Map<number, Product>>
 }
 
 export let initialAppState = (): AppState => ({
     route: { kind: 'home' },
     currentPage: { kind: 'home-page' },
     products: unloadedAsyncState(),
-    productCache: Map()
 })
 
 export type RouteParams = { kind: 'home' } |
@@ -37,8 +35,8 @@ export type ContactPageState = { kind: 'contact-page' }
 let ContactPageState = (): ContactPageState => ({ kind: 'contact-page' })
 export type ProductOverViewPageState = { kind: 'products-overview' }
 let ProductOverViewPageState = (): ProductOverViewPageState => ({ kind: 'products-overview' })
-export type ProductDetailPageState = { kind: 'product-detail' }
-let ProductDetailPageState = (): ProductDetailPageState => ({ kind: 'product-detail' })
+export type ProductDetailPageState = { kind: 'product-detail', productId: number }
+let ProductDetailPageState = (id: number): ProductDetailPageState => ({ kind: 'product-detail', productId: id })
 export type NotFoundPageState = { kind: 'notfound' }
 let NotFoundPageState = (): NotFoundPageState => ({ kind: 'notfound' })
 
@@ -64,12 +62,17 @@ export let setAppStateRoute = (route: RouteParams, appState: AppState): AppState
             return Entity(appState)
                 .set('route', _ => route)
                 .set('currentPage', _ => ProductOverViewPageState())
-                .set('products', _ => loadingAsyncState(() => get_all_products()))
+                .set('products', data => {
+                    if (data.kind == 'loaded') {
+                        return data
+                    }
+                    return loadingAsyncState(() => get_all_products())
+                })
                 .commit()
         case 'product':
             return Entity(appState)
                 .set('route', _ => route)
-                .set('currentPage', _ => ProductDetailPageState())
+                .set('currentPage', _ => ProductDetailPageState(route.id))
                 .commit()
         default:
             return Entity(appState)
@@ -78,5 +81,6 @@ export let setAppStateRoute = (route: RouteParams, appState: AppState): AppState
     }
 }
 
-export let set_Products = (newProducts: AsyncState<Product[]>) => (s0: AppState): AppState =>
-    Entity(s0).set('products', _ => newProducts).commit() 
+export let set_Products = (newProducts: AsyncState<Map<number, Product>>) => (s0: AppState): AppState =>
+    Entity(s0).set('products', _ => newProducts).commit()
+

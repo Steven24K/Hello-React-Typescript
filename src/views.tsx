@@ -1,3 +1,4 @@
+import { Map } from "immutable";
 import { Action, fromJSX, Widget } from "widgets-for-react";
 import { NotFoundPage } from "./components/errors/NotFound";
 import { AboutPage } from "./components/pages/About.";

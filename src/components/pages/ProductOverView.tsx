@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { NavLink } from 'react-router-dom'
 import { AppState } from '../../state'
 
 type ProductOverViewPageProps = {
@@ -11,12 +12,14 @@ export const ProductOverViewPage = (props: ProductOverViewPageProps) => {
     return <div>
         <h1>ProductOverView</h1>
 
-        {products.map(product => <div key={product.Id}>
-            <h3>{product.Name}</h3>
-            <p>{product.Description}</p>
-            <b>Price: {product.Price}</b>
-            <br/>
-            <i>{product.Tags.reduce((xs, x) => xs + x + ' ', '')}</i>
+        {products.toIndexedSeq().map(product => <div key={product.Id}>
+            <NavLink to={`/product/${product.Id}`}>
+                <h3>{product.Name}</h3>
+                <p>{product.Description}</p>
+                <b>Price: {product.Price}</b>
+                <br />
+                <i>{product.Tags.reduce((xs, x) => xs + x + ' ', '')}</i>
+            </NavLink>
         </div>)}
     </div>
 }
