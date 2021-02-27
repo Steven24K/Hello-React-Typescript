@@ -1,9 +1,7 @@
 import * as React from 'react'
-import { AppState } from '../../state'
+import { DefaultComponentProps } from '../../state'
 
-type NotFoundPageProps = {
-    appState: AppState
-}
+interface NotFoundPageProps extends DefaultComponentProps { }
 
 export const NotFoundPage = (props: NotFoundPageProps) => <div>
     <h1>Page not found | 404</h1>

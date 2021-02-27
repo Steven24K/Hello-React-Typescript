@@ -1,20 +1,25 @@
 import { Map } from "immutable"
 import { Entity } from "ts-lenses"
-import { AsyncState, loadingAsyncState, unloadedAsyncState } from "widgets-for-react"
+import { AsyncState, Fun, loadingAsyncState, unloadedAsyncState } from "widgets-for-react"
 import { get_all_products } from "./api"
 import { Product } from "./models/Product"
 
 export type AppState = {
     route: RouteParams
-    currentPage: HomePageState | AboutPageState | ContactPageState | ProductOverViewPageState | ProductDetailPageState | NotFoundPageState
+    currentPage: HomePageState | AboutPageState | ContactPageState | ProductOverViewPageState | ProductDetailPageState | NotFoundPageState | NeverPageState
     products: AsyncState<Map<number, Product>>
 }
 
 export let initialAppState = (): AppState => ({
     route: { kind: 'home' },
-    currentPage: { kind: 'home-page' },
+    currentPage: HomePageState(),
     products: unloadedAsyncState(),
 })
+
+export interface DefaultComponentProps {
+    appState: AppState
+    setState: (_: Fun<AppState, AppState>) => void
+}
 
 export type RouteParams = { kind: 'home' } |
 { kind: 'about' } |
@@ -27,16 +32,23 @@ export const isRouteChanged = (oldRoute: RouteParams, newRoute: RouteParams) => 
     || (oldRoute.kind == 'product' && newRoute.kind == 'product' && oldRoute.id != newRoute.id)
     || (oldRoute.kind == 'products' && newRoute.kind == 'products' && oldRoute.order != oldRoute.order)
 
-export type HomePageState = { kind: 'home-page' }
-let HomePageState = (): HomePageState => ({ kind: 'home-page' })
+export type NeverPageState = { kind: 'never' }
+
+export type HomePageState = { kind: 'home-page', color: string }
+let HomePageState = (): HomePageState => ({ kind: 'home-page', color: 'white' })
+
 export type AboutPageState = { kind: 'about-page' }
 let AboutPageState = (): AboutPageState => ({ kind: 'about-page' })
+
 export type ContactPageState = { kind: 'contact-page' }
 let ContactPageState = (): ContactPageState => ({ kind: 'contact-page' })
+
 export type ProductOverViewPageState = { kind: 'products-overview' }
 let ProductOverViewPageState = (): ProductOverViewPageState => ({ kind: 'products-overview' })
+
 export type ProductDetailPageState = { kind: 'product-detail', productId: number }
 let ProductDetailPageState = (id: number): ProductDetailPageState => ({ kind: 'product-detail', productId: id })
+
 export type NotFoundPageState = { kind: 'notfound' }
 let NotFoundPageState = (): NotFoundPageState => ({ kind: 'notfound' })
 

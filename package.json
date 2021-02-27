@@ -34,27 +34,27 @@
     "gh-pages": "^2.2.0",
     "html-webpack-plugin": "^3.2.0",
     "style-loader": "^0.23.1",
-    "ts-loader": "^6.0.4",
-    "typescript": "^3.5.2",
+    "ts-loader": "^6.2.2",
+    "typescript": "^4.2.2",
     "url-loader": "^1.1.2",
-    "webpack": "^4.35.0",
-    "webpack-cli": "^3.3.5",
-    "webpack-dev-middleware": "^3.5.1",
-    "webpack-dev-server": "^3.1.14"
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-middleware": "^3.7.3",
+    "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "@types/chance": "^1.1.0",
-    "@types/react": "^16.9.18",
-    "@types/react-dom": "^16.9.5",
-    "@types/react-router-dom": "^5.1.5",
+    "@types/chance": "^1.1.1",
+    "@types/react": "^17.0.2",
+    "@types/react-dom": "^17.0.1",
+    "@types/react-router-dom": "^5.1.7",
     "chance": "^1.1.7",
     "immutable": "^4.0.0-rc.12",
     "moment": "^2.29.1",
     "path": "~0.12.7",
-    "react": "~16.6.0",
-    "react-dom": "~16.6.0",
+    "react": "^17.0.1",
+    "react-dom": "16.6",
     "react-router-dom": "^5.2.0",
     "ts-lenses": "^0.9.4",
-    "widgets-for-react": "^1.7.1"
+    "widgets-for-react": "^2.1.1"
   }
 }
