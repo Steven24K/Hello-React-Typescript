@@ -22,7 +22,7 @@ export const ProductDetailPage = (props: ProductDetailPageProps) => {
                 <div className="card-body">
                     <h5 className="card-title">{product.Name}</h5>
                     <p className="card-text">
-                        {product.Name}
+                        {product.Description}
                     </p>
                 </div>
                 <div className="card-footer">

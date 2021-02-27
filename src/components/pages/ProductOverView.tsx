@@ -18,7 +18,7 @@ export const ProductOverViewPage = (props: ProductOverViewPageProps) => {
                             <div className="card-body">
                                 <h5 className="card-title">{product.Name}</h5>
                                 <p className="card-text">
-                                    {product.Name}
+                                    {product.Description}
                                 </p>
                                 <NavLink to={`/product/${product.Id}`} className="btn btn-primary">See details</NavLink>
                             </div>
