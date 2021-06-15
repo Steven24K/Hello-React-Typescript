@@ -13,5 +13,6 @@ export const routes = (s0: AppState): Widget<Action<AppState>> => routerSwitch<R
     route<{ id: number }, RouteParams>('/product/:id', a => ({ kind: 'product', id: isNaN(a.id) ? 0 : +a.id })),
 
     notFoundRouteCase<RouteParams>(() => ({ kind: '404' }))
-]).filter(newRoute => isRouteChanged(s0.route, newRoute))
+])
+    //.filter(newRoute => isRouteChanged(s0.route, newRoute))
     .map(route => s => setAppStateRoute(route, s))
