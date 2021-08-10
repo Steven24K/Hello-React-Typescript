@@ -1,5 +1,5 @@
 import '../static/css/site.css'
-import { Action, any, notFoundRouteCase, route, routerSwitch, stateful } from 'widgets-for-react';
+import { Action, any, stateful } from 'widgets-for-react';
 import { AppState, initialAppState } from './state';
 import { footer, navbar } from './views';
 import { memoryRouter } from './components/MemoryRouter';
