@@ -12,9 +12,10 @@ const data: string[] = [
 ]
 interface AppState {
     search: string
+    counter: number
 }
 
-const zeroAppState = (): AppState => ({ search: '' })
+const zeroAppState = (): AppState => ({ search: '', counter: 0 })
 interface AppProps {
 
 }
@@ -22,9 +23,17 @@ interface AppProps {
 export const App = (props: AppProps) => {
     const [appState, setState] = React.useState<AppState>(zeroAppState())
 
+    React.useEffect(() => {
+        document.title = `You clicked ${appState.counter} times`
+    })
+
     return <div className="App">
         <h1>Hello React Typescript</h1>
         <p>Start editing the <code>App.tsx</code> file to get started</p>
+
+        <button onClick={() => setState(s => ({...s, counter: s.counter +1}))}>
+            The awesome {appState.counter}
+        </button>
 
         <input
             placeholder="Search to filter"
