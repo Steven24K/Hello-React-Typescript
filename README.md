@@ -1,4 +1,7 @@
 # Hello-React-Typescript
+This *clean* branch has less dependenies and has only one single React class component with a minimal state. 
+Usefull if you want to start from scratch. 
+
 This is a custom React toolchain for starting a single page React app with Typescript. A demo app is available [here](https://stevenkoerts.nl/Hello-React-Typescript/).
 
 ## Dependencies 

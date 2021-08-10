@@ -1,21 +1,61 @@
+import * as React from 'react'
+import { BrowserRouter, NavLink, Route, Switch } from 'react-router-dom'
 import '../static/css/site.css'
-import { Action, any, notFoundRouteCase, route, routerSwitch, stateful } from 'widgets-for-react';
-import { AppState, initialAppState } from './state';
-import { footer, navbar } from './views';
-import { memoryRouter } from './components/MemoryRouter';
-import { page } from './page';
-import { routes } from './routes';
 
+const data: string[] = [
+    "banana",
+    "apple",
+    "pineapple",
+    "orange",
+    "mango",
+    "coconut"
+]
+interface AppState {
+    search: string
+}
 
-export const App = stateful<AppState>()(s0 => memoryRouter<Action<AppState>>()(
-    any<Action<AppState>>()([
+interface AppProps {
 
-        routes(s0),
+}
 
-        navbar(s0),
+export class App extends React.Component<AppProps, AppState> {
+    constructor(props: AppProps) {
+        super(props)
+        this.state = { search: '' }
+    }
 
-        page(s0),
+    render() {
+        return <div className="App">
+            <h1>Hello React Typescript</h1>
+            <p>Start editing the <code>App.tsx</code> file to get started</p>
 
-        footer()
-    ])
-).map(a => a(s0)))(initialAppState())
+            <input
+                placeholder="Search to filter"
+                value={this.state.search}
+                onChange={e => this.setState(s => ({ ...s, search: e.target.value }))}
+            />
+
+            <ul>
+                {data.filter(d => this.state.search.includes(d) || d.includes(this.state.search) || this.state.search == '').map(d => <li key={d}>{d}</li>)}
+            </ul>
+
+            <h3>Hot module reloading is on!</h3>
+
+            {/**Small routing example */}
+            <BrowserRouter>
+                <nav>
+                    <ul>
+                        <li><NavLink to='/'>Home</NavLink></li>
+                        <li><NavLink to='/about'>About</NavLink></li>
+                        <li><NavLink to='/contact'>Contact</NavLink></li>
+                    </ul>
+                </nav>
+                <Switch>
+                    <Route path='/' exact render={() => <h1>Home</h1>}/>
+                    <Route path='/about' render={() => <h1>About</h1>}/>
+                    <Route path='/contact' render={() => <h1>Contact</h1>}/>
+                </Switch>
+            </BrowserRouter>
+        </div>
+    }
+}
